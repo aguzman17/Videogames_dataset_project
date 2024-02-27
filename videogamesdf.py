@@ -6,8 +6,23 @@ import seaborn as sns
 file_path = "vgsales.csv"
 df = pd.read_csv(file_path)
 
-# Step 5: Cleaning Your Data
-# Add your data cleaning steps here
+# Check for missing values
+missing_values = df.isnull().sum()
+print("Missing Values:")
+print(missing_values)
+
+# Handle missing data (example: fill missing values with mean)
+df.fillna(df.mean(), inplace=True)
+
+# Correct erroneous data (example: remove duplicates)
+df.drop_duplicates(inplace=True)
+
+# Format data (example: convert 'Year' column to integer)
+df['Year'] = df['Year'].astype(int)
+
+# Display the cleaned dataset
+print("\nCleaned Dataset:")
+print(df.head())
 
 # Step 6: Single Variable Distribution Plots
 # Choose four columns
