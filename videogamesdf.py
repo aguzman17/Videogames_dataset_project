@@ -3,19 +3,20 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load the dataset from the local file
-file_path = "vgsales.csv"
+file_path = "https://raw.githubusercontent.com/aguzman17/Videogames_dataset_project/main/vgsales.csv"
 df = pd.read_csv(file_path)
 
-#Step 5
+# Step 5: Cleaning the Data
 # Check for missing values
 missing_values = df.isnull().sum()
 print("Missing Values:")
 print(missing_values)
 
-# Fill missing values with mean
-df.fillna(df.mean(), inplace=True)
+# Fill missing values with mean for numeric columns
+numeric_columns = ['Year', 'NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales', 'Global_Sales']
+df[numeric_columns] = df[numeric_columns].fillna(df[numeric_columns].mean())
 
-# Rremove duplicates
+# Remove duplicates
 df.drop_duplicates(inplace=True)
 
 # Convert 'Year' column to integer
@@ -48,4 +49,3 @@ for relationship in relationships:
     plt.xlabel(relationship[0])
     plt.ylabel(relationship[1])
     plt.show()
-
