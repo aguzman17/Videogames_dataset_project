@@ -2,11 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load the dataset from the local file
 file_path = "https://raw.githubusercontent.com/aguzman17/Videogames_dataset_project/main/vgsales.csv"
 df = pd.read_csv(file_path)
 
-# Step 5: Cleaning the Data
+# Step 5
 # Check for missing values
 missing_values = df.isnull().sum()
 print("Missing Values:")
@@ -22,7 +21,6 @@ df.drop_duplicates(inplace=True)
 # Convert 'Year' column to integer
 df['Year'] = df['Year'].astype(int)
 
-# Display the cleaned dataset
 print("\nCleaned Dataset:")
 print(df.head())
 
@@ -38,7 +36,7 @@ for column in columns:
     plt.ylabel('Frequency')
     plt.show()
 
-# Step
+# Step 7
 # Choose two relationships
 relationships = [('Year', 'Global_Sales'), ('EU_Sales', 'JP_Sales')]
 
