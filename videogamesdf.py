@@ -5,7 +5,6 @@ import seaborn as sns
 file_path = "https://raw.githubusercontent.com/aguzman17/Videogames_dataset_project/main/vgsales.csv"
 df = pd.read_csv(file_path)
 
-# Step 5
 # Check for missing values
 missing_values = df.isnull().sum()
 print("Missing Values:")
@@ -18,14 +17,12 @@ df[numeric_columns] = df[numeric_columns].fillna(df[numeric_columns].mean())
 # Remove duplicates
 df.drop_duplicates(inplace=True)
 
-# Convert 'Year' column to integer
+# Convert Year column to integer
 df['Year'] = df['Year'].astype(int)
 
 print("\nCleaned Dataset:")
 print(df.head())
 
-# Step 6
-# Choose four columns
 columns = ['Year', 'NA_Sales', 'EU_Sales', 'JP_Sales']
 
 for column in columns:
@@ -36,8 +33,6 @@ for column in columns:
     plt.ylabel('Frequency')
     plt.show()
 
-# Step 7
-# Choose two relationships
 relationships = [('Year', 'Global_Sales'), ('EU_Sales', 'JP_Sales')]
 
 for relationship in relationships:
