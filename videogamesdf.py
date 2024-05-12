@@ -215,7 +215,7 @@ plt.xticks(range(1, 11))
 plt.grid(True)
 plt.show()
 
-# Based on the Elbow Method, choose the optimal number of clusters (K)
+# Based on the Elbow Method the optimal number of clusters
 optimal_k = 4
 
 # Perform KMeans clustering with the optimal number of clusters
