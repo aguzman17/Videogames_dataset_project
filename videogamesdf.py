@@ -138,3 +138,98 @@ for max_depth in max_depth_values:
         test_mse_dt = mean_squared_error(y_test, y_test_pred_dt)
 
         print(f"Decision Tree (max_depth={max_depth}, min_samples_split={min_samples_split}) - Training MSE: {train_mse_dt}, Testing MSE: {test_mse_dt}")
+        
+### Milestone 3 ###
+
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+#Step 10
+# Group the dataset by release year and calculate the total global sales for each year
+yearly_sales = df.groupby('Year')['Global_Sales'].sum().reset_index()
+
+# Drop rows with missing values in the 'Year' column
+df_cleaned = df.dropna(subset=['Year'])
+
+# Select numeric columns for PCA
+numeric_columns = ['NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales']
+df_numeric = df_cleaned[numeric_columns]
+
+# Standardize the features
+scaler = StandardScaler()
+df_scaled = scaler.fit_transform(df_numeric)
+
+# Perform PCA
+pca = PCA()
+pca.fit(df_scaled)
+
+# Explained variance ratio
+explained_variance_ratio = pca.explained_variance_ratio_
+
+# Plot explained variance ratio
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, marker='o', linestyle='-')
+plt.title('Explained Variance Ratio by Principal Components')
+plt.xlabel('Number of Principal Components')
+plt.ylabel('Explained Variance Ratio')
+plt.xticks(range(1, len(explained_variance_ratio) + 1))
+plt.grid(True)
+plt.show()
+
+# Cumulative explained variance ratio
+cumulative_explained_variance_ratio = explained_variance_ratio.cumsum()
+
+# Plot cumulative explained variance ratio
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(cumulative_explained_variance_ratio) + 1), cumulative_explained_variance_ratio, marker='o', linestyle='-')
+plt.title('Cumulative Explained Variance Ratio by Principal Components')
+plt.xlabel('Number of Principal Components')
+plt.ylabel('Cumulative Explained Variance Ratio')
+plt.xticks(range(1, len(cumulative_explained_variance_ratio) + 1))
+plt.grid(True)
+plt.show()
+
+#Step 11
+# Select numeric columns for clustering analysis
+sales_columns = ['NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales']
+X_sales = df[sales_columns]
+
+# Standardize the features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_sales)
+
+# Determine the optimal number of clusters using the Elbow Method
+inertia = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X_scaled)
+    inertia.append(kmeans.inertia_)
+
+# Plot the Elbow Method
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, 11), inertia, marker='o', linestyle='-', color='b')
+plt.title('Elbow Method for Optimal K')
+plt.xlabel('Number of Clusters (K)')
+plt.ylabel('Inertia')
+plt.xticks(range(1, 11))
+plt.grid(True)
+plt.show()
+
+# Based on the Elbow Method, choose the optimal number of clusters (K)
+optimal_k = 4
+
+# Perform KMeans clustering with the optimal number of clusters
+kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+kmeans.fit(X_scaled)
+
+# Assign cluster labels to the dataset
+df['Cluster'] = kmeans.labels_
+
+# Visualize the clusters in 2D space
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='NA_Sales', y='EU_Sales', hue='Cluster', data=df, palette='viridis', legend='full')
+plt.title('Clustering of Video Games Based on Sales in NA and EU')
+plt.xlabel('NA Sales')
+plt.ylabel('EU Sales')
+plt.grid(True)
+plt.show()
